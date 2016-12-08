@@ -1,0 +1,25 @@
+Exam report for Jiacheng Dong
+=============================
+
+Scores
+------
+
+  Problem                   Points
+  ----------------------- --------
+  constructors-1a                4
+  constructors-3c                4
+  km-arrays-1d                   4
+  km-pointersintro-2a            4
+  passbyvalue-4a                 4
+  km-declarationopts-2b          2
+  km-firstclass-1b               4
+  km-makefile-2a                 4
+  rectangle                     18
+
+Total score: 48/50 (96%)
+
+Code Problem Test Output
+------------------------
+
+See `tests.txt` (or `tests-1.txt` and `tests-2.txt`) for autograder test
+outputs.

@@ -1,0 +1,201 @@
+#include "quadtree.h"
+
+Quadtree::~Quadtree(){
+	clear();
+}
+void Quadtree::clear(){
+	clear(root);
+}
+void Quadtree::clear(QuadtreeNode* &subroot)
+{
+	if(subroot == NULL)
+		return;
+	
+		clear(subroot->nwChild);
+	
+		clear(subroot->neChild);
+	
+		clear(subroot->swChild);
+	
+		clear(subroot->seChild);
+	delete subroot;
+	subroot = NULL;
+	std::cout<<"segfaltclear"<<std::endl;
+	return;
+}
+
+Quadtree::Quadtree(){
+	root = NULL;
+	length = 0;
+	x0 = 0;
+	y0 = 0;
+	x1 = 0;
+	y1 = 0;
+}
+
+void Quadtree::buildTree(PNG const & source, int d){
+clear();
+if(d == 0)
+{
+root = NULL;
+x0 = 0;
+x1 = 0;
+y0 = 0;
+y1 = 0;
+length = 0;
+}
+else
+{
+	x0 = 0;
+	x1 = x0+d;
+	y0 = 0;
+	y1 = y0+d;
+	length = d;
+	root = buildTree(source,d,x0,y0,x1,y1);
+}
+}
+
+Quadtree::QuadtreeNode* Quadtree::buildTree(PNG const & source, int d, int X0, int Y0, int X1, int Y1)//helper function
+{
+if(Y0 + 1 == Y1)
+{
+QuadtreeNode* subroot = new QuadtreeNode();
+subroot->nwChild = NULL;
+subroot->neChild = NULL;
+subroot->swChild = NULL;
+subroot->seChild = NULL;
+subroot->element = *source(X0,Y0);
+return subroot;
+}
+else	
+{
+QuadtreeNode* subroot = new QuadtreeNode();
+//X1 = X0+d;
+//Y1= Y0+d;
+d = Y1 - Y0;
+subroot->nwChild = buildTree(source,d/2,X0, Y0, X0+d/2, Y0+d/2);
+subroot->seChild = buildTree(source,d/2,X0+d/2, Y0, X1, Y0+d/2);
+subroot->neChild = buildTree(source,d/2,X0, Y0+d/2, X0+d/2, Y1);
+subroot->nwChild = buildTree(source,d/2,X0+d/2, Y0+d/2, X1, Y1);
+std::cout<<"segfalt"<<std::endl;
+subroot->element.red = (subroot->nwChild->element.red + subroot->neChild->element.red + subroot->swChild->element.red + subroot->seChild->element.red)/4;
+std::cout<<"segfalt81"<<std::endl;
+
+subroot->element.green = (subroot->nwChild->element.green + subroot->neChild->element.green + subroot->swChild->element.green + subroot->seChild->element.green)/4;
+subroot->element.blue = (subroot->nwChild->element.blue + subroot->neChild->element.blue + subroot->swChild->element.blue + subroot->seChild->element.blue)/4;
+subroot->element.alpha = (subroot->nwChild->element.alpha + subroot->neChild->element.alpha + subroot->swChild->element.alpha + subroot->seChild->element.alpha)/4;
+return subroot;
+}
+}
+
+Quadtree::Quadtree(PNG const & source, int d)
+{
+buildTree(source,d);
+}
+
+//big three
+Quadtree::Quadtree(Quadtree const &other)
+{
+	copy(other);
+}
+
+void Quadtree::copy(Quadtree const &other)
+{
+	clear();
+	x0 = other.x0;
+	y0 = other.y0;
+	x1 = other.x1;
+	y1 = other.y1;
+	length = other.length;
+	//QuadtreeNode* otherRoot = other.root;
+	root = new QuadtreeNode();
+	copy(root,other.root);
+}
+
+void Quadtree::copy(QuadtreeNode* &subroot, QuadtreeNode* const &otherRoot)
+{
+	if(otherRoot == NULL)
+		return;
+	if (subroot == NULL)
+		subroot = new QuadtreeNode();
+	root->element = otherRoot->element;
+	copy(subroot->nwChild,otherRoot->nwChild);
+	copy(subroot->neChild,otherRoot->neChild);
+	copy(subroot->swChild,otherRoot->swChild);
+	copy(subroot->seChild,otherRoot->seChild);
+}
+
+Quadtree const & Quadtree::operator= (Quadtree const &other)
+{
+	if(this != &other)
+	{
+		clear();
+		copy(other);
+	}
+	return *this;
+}
+
+RGBAPixel Quadtree::getPixel(int x, int y) const
+{
+	RGBAPixel temp;
+	if(root == NULL || x < x0 || x > x1 || y < y0 || y > y1)
+		return temp;
+	temp = *getPixel(root,x,y,x0,y0,x1,y1,length);
+	return temp;
+}
+
+RGBAPixel* Quadtree::getPixel(QuadtreeNode* subroot,int X, int Y, int X0, int Y0, int X1, int Y1, int d) const
+{
+	if(subroot == NULL)
+		return NULL;
+	//X1 = X0 + d;
+	//Y1 = Y0 + d;
+	int C = X1/2;
+	int D = Y1/2;
+	d = X1 - X0;
+	RGBAPixel* temp = &(subroot->element);
+	RGBAPixel* temp2;
+	if(X < C && X<D)
+		temp2 = getPixel(subroot->nwChild,X,Y,X0,Y0,C,D,d/2);
+	else if(X <= C && X >= D)
+		temp2 = getPixel(subroot->swChild,X,Y,X0,D,C,Y1,d/2);
+	else if(X >= C && X <= D)
+		temp2 = getPixel(subroot->neChild,X,Y,C,Y0,X1,D,d/2);
+	else
+		temp2 = getPixel(subroot->seChild,X,Y,C,D,X1,Y1,d/2);
+	if(temp2 == NULL)
+		return temp;
+	return temp2;
+
+}
+
+
+PNG Quadtree::decompress	()	const
+{
+	
+	if(root == NULL)
+		{
+		PNG output;
+		return output;
+
+		}
+	 PNG output(x1,y1);
+	 for(int x = 0; x<x1 ; x++)
+	 {
+	 	for(int y = 0; y<y1 ; y++)
+	 		*output(x,y) = getPixel(x,y);
+	 }
+	 return output;
+}
+
+void Quadtree::clockwiseRotate (   ) {return ;}
+   void Quadtree::prune ( int   tolerance ){return ;} 
+   int Quadtree::pruneSize  ( int   tolerance ) const{return 0;}
+
+  int Quadtree::idealPrune  ( int   numLeaves ) const{return 0;}
+/**
+ * @file quadtree.cpp
+ * Quadtree class implementation.
+ * @date Spring 2008
+ */
+

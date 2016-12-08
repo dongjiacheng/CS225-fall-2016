@@ -1,0 +1,319 @@
+#include "maze.h"/* Your code here! */
+
+SquareMaze::SquareMaze()
+{	
+
+}
+
+
+void SquareMaze::makeMaze(int width,int height)
+{
+	DisjointSets newmaze;
+	int size = width*height;
+	newmaze.addelements(width*height);
+	cell  smallelement;//thing to put in vector
+	smallelement.rightWall = true;
+	smallelement.downWall = true;
+	vector<cell> newCells(size,smallelement);
+	cells = newCells;
+	for(int i = 0; i < size; ++i)
+	{
+	  cells[i].x = i%width;
+	  cells[i].y = int(i/width);
+	  cells[i].visited = false;
+	}
+	maze = newmaze;
+	this->width = width;
+	this->height = height;//new mze
+	int step = 0;
+
+	vector<int> myvector;
+	for (int i = 0; i < size*2; ++i) 
+	myvector.push_back(i);
+	std::srand(time(NULL));
+	std::random_shuffle (myvector.begin(), myvector.end());
+	
+	
+	while(step < size*2)
+	{
+		int i = myvector[step];
+		bool goright = false;
+		if (i<size)
+		{
+			goright = true;
+		}
+		
+		i = i % size;
+
+		
+		//int i =  rand() % size; 
+		//if(cells[i].visited == true)
+		//	continue;
+		//++step;
+		//cells[i].visited = true;
+		
+		if(cells[i].x < width-1)
+		{
+			if(cells[i].y < height-1)//all cells except the outer right and outer down
+			{
+				int currposition = cells[i].x + (cells[i].y)*width;
+				if(goright)
+		 	 {
+				
+				int nextRightpositon =  cells[i+1].x + (cells[i+1].y)*width;
+				if(maze.find(currposition)!= maze.find(nextRightpositon))//the x+y*width is the biaoqain of each element.
+				{
+					cells[i].rightWall = false;
+					maze.setunion(currposition,nextRightpositon);
+
+					//step;
+				}
+			 }
+			 	if(!goright){
+				int nextDownpostion = cells[i+width].x + (cells[i+width].y)*width;
+				if(maze.find(currposition)!= maze.find(nextDownpostion))
+				{
+					cells[i].downWall = false;
+					maze.setunion(currposition,nextDownpostion);
+
+					//++step;
+				}
+							}
+			}
+			else
+			{
+				if(goright){
+				int currposition = cells[i].x + (cells[i].y)*width;
+				int nextRightpositon =  cells[i+1].x + (cells[i+1].y)*width;
+				if(maze.find(currposition)!= maze.find(nextRightpositon))//the x+y*width is the biaoqain of each element.
+				{
+				cells[i].rightWall = false;
+				maze.setunion(currposition,nextRightpositon);
+
+				//++step;
+
+				}
+						}
+			}
+
+		}
+		else if (cells[i].y < height-1 && (!goright))
+		{
+			int currposition = cells[i].x + (cells[i].y)*width;
+			int nextDownpostion = cells[i+width].x + (cells[i+width].y)*width;
+			if(maze.find(currposition)!= maze.find(nextDownpostion))
+				{
+					cells[i].downWall = false;
+					maze.setunion(currposition,nextDownpostion);
+
+					//++step;
+				}
+		}
+		++step;
+	}
+
+}
+
+void SquareMaze::setWall(int x,int y,int dir, bool exists)
+{
+	int position = x + y*width;//postion of wall
+	//cells[position].x = x;
+	//cells[position].y = y;
+	if(dir == 0)
+	{
+		cells[position].rightWall = exists;
+	}
+	else
+	{
+		cells[position].downWall = exists;
+	}
+}
+
+bool SquareMaze::canTravel(int x, int y, int dir) const
+{
+	int currPostion = y*width + x;
+	if(dir == 0 && x!=(width-1))//right
+	{
+		if(cells[currPostion].rightWall == true)
+			return false;
+		else 
+			return true;
+	}
+	else if (dir == 1 && y!=(height-1))//down
+	{
+		if(cells[currPostion].downWall == true)
+			return false;
+		else
+			return true;
+	}
+	else if (dir == 2 && x != 0)//left
+	{
+		int leftpostion = currPostion - 1;
+		if(cells[leftpostion].rightWall == true)
+			return false;
+		else 
+			return true;
+	}
+	else if (dir == 3 && y != 0)//up
+	{
+		int uppostion = currPostion - width;
+		if(cells[uppostion].downWall == true)
+			return false;
+		else
+			return true;
+	}
+	return false;
+}
+
+
+PNG * SquareMaze::drawMaze() const
+{
+	PNG* img = new PNG(10 * width + 1, 10 * height + 1);
+	(*img)(0,0) -> red = 0;
+	(*img)(0,0) -> green = 0;
+	(*img)(0,0) -> blue = 0;
+ for (int i = 0; i < 10*height; i++)//topmost
+ 	{
+	(*img)(0,i) -> red = 0;
+	(*img)(0,i) -> green = 0;
+	(*img)(0,i) -> blue = 0;
+    }
+ for (int j = 10; j < 10*width; j++)//leftmost
+ 	{
+	(*img)(j,0) -> red = 0;
+	(*img)(j,0) -> green = 0;
+	(*img)(j,0) -> blue = 0;
+    }
+
+    for (int i = 0; i < width*height; i++)
+    {
+    	int x = i%width;
+    	int y =  i/width;
+    	if(cells[i].rightWall == true)
+    	{
+    		for(int k = 0 ; k <= 10; k++)
+    		{
+    			(*img)((x+1)*10,y*10+k) -> red = 0;
+				(*img)((x+1)*10,y*10+k) -> green = 0;
+				(*img)((x+1)*10,y*10+k) -> blue = 0;
+    		}
+    	}
+    	if(cells[i].downWall == true)
+    	{
+    		for(int k = 0 ; k <= 10; k++)
+    		{
+    			(*img)(x*10+k,(y+1)*10) -> red = 0;
+				(*img)(x*10+k,(y+1)*10) -> green = 0;
+				(*img)(x*10+k,(y+1)*10) -> blue = 0;
+    		}
+    	}
+		
+    }
+    return img;
+}
+
+
+PNG * SquareMaze::drawMazeWithSolution	(		)	
+{
+return NULL;
+}
+
+
+vector< int > SquareMaze::solveMaze	(		)	
+{
+vector<int> v;
+for(auto &cell : cells)
+	cell.visited = false;
+
+//stack<int> result = solveMazehelper(0);
+
+//zuo
+
+
+
+//you
+
+//shang
+
+//xia
+
+return v;
+}
+/*
+stack<int> SquareMaze::solveMazehelper(int i)
+{
+stack<int> stack;
+stack<int> left;
+stack<int> right;
+stack<int> down;
+stack<int> up;
+left.push(-1);
+right.push(-1);
+down.push(-1);
+up.push(-1);
+cell curr = cells[i];
+
+
+if(y == height-1)
+
+
+if(canTravel(curr.x,curr.y,0))
+{//right
+	int nextRightpositon = i + 1;
+if(cells[nextRightpositon].visited == true)
+	;
+else
+	{
+	right = solveMazehelper(nextRightpositon);
+	}
+}
+
+if(canTravel(curr.x,curr.y,1))
+//down
+
+{
+int nextDownpostion = i + width;
+if(cells[nextDownpostion].visited == true)
+	;
+else
+	{
+	down = solveMazehelper(nextDownpositon);
+	}
+}
+
+if(canTravel(curr.x,curr.y,2))
+//left
+{
+int nextLeftpostion = i - 1;
+if(cells[nextLeftpostion].visited == true)
+	;
+else
+	{
+	left = solveMazehelper(nextLeftpositon);
+	}
+}
+
+if(canTravel(curr.x,curr.y,3))
+//up	
+{
+int nextUppostion = i - width;
+if(cells[nextUppostion].visited == true)
+	;
+else
+	{
+	up = solveMazehelper(nextUppositon);
+	}
+}
+
+//four sequense
+if(left.top() > -1 && left.size()>= right.size() && left.size()>= down.size() && left.size() >= up.size())
+left.push(2);
+else if(right.top() > -1 && right.size())
+
+
+
+}
+*/
+
+
+

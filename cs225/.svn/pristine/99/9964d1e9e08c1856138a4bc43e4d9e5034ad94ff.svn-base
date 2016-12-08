@@ -1,0 +1,124 @@
+/**
+ * @file anagram_dict.cpp
+ * Implementation of the AnagramDict class.
+ *
+ * @author Matt Joras
+ * @date Winter 2013
+ */
+
+#include "anagram_dict.h"
+
+#include <algorithm> /* I wonder why this is included... */
+#include <fstream>
+
+using std::string;
+using std::vector;
+using std::ifstream;
+
+/**
+ * Constructs an AnagramDict from a filename with newline-separated
+ * words.
+ * @param filename The name of the word list file.
+ */
+AnagramDict::AnagramDict(const string& filename)
+{
+    vector<string> Words;/* Your code goes here! */
+	ifstream words(filename);
+	string word;
+	if(words.is_open())
+	{
+	while(getline(words,word))
+		Words.push_back(word);
+
+	}
+	for(auto & ite : Words)
+	{	
+		auto lookedup = dict.find(ite);
+		if(lookedup == dict.end())
+		{
+			std::vector<char> v;
+			for(size_t i = 0; i < ite.length();++i)
+				v.push_back(ite.at(i));
+			std::sort(v.begin(),v.end());
+			dict.insert(std::pair<string,std::vector<char>>(ite,v));
+		}
+
+	}
+}
+
+/**
+ * Constructs an AnagramDict from a vector of words.
+ * @param words The vector of strings to be used as source words.
+ */
+AnagramDict::AnagramDict(const vector<string>& words)
+{
+   for(auto & ite : words)
+	{	
+		auto lookup = dict.find(ite);
+		if(lookup == dict.end())
+		{
+			std::vector<char> v;
+			for(size_t i = 0; i < ite.length();++i)
+				v.push_back(ite.at(i));
+			std::sort(v.begin(),v.end());
+			dict.insert(std::pair<string,std::vector<char>>(ite,v));
+		}
+
+	} /* Your code goes here! */
+
+}
+
+/**
+ * @param word The word to find anagrams of.
+ * @return A vector of strings of anagrams of the given word. Empty
+ * vector returned if no anagrams are found or the word is not in the
+ * word list.
+ */
+vector<string> AnagramDict::get_anagrams(const string& word) const
+{
+    /* Your code goes here! */
+   std::vector<string> v;
+   v = get_Anagrams(word);
+   if(v.size()>1)
+   	return v;
+   else
+    return std::vector<string> ();
+}
+
+vector<string> AnagramDict::get_Anagrams(const string& word) const
+{
+	std::vector<string> v;
+	auto lookedup = dict.find(word);
+	if(lookedup != dict.end())
+	{
+		std::vector<char> vchar = lookedup->second;
+		for(auto & value : dict)
+		{
+			if(value.second == vchar)
+				v.push_back(value.first);
+		}
+	}
+	return v;
+}
+
+/**
+ * @return A vector of vectors of strings. Each inner vector contains
+ * the "anagram siblings", i.e. words that are anagrams of one another.
+ * NOTE: It is impossible to have one of these vectors have less than
+ * two elements, i.e. words with no anagrams are ommitted.
+ */
+vector<vector<string>> AnagramDict::get_all_anagrams() const
+{
+    std::vector<std::vector<string>> v;
+
+	
+		for(auto & value : dict)
+		{
+			string temp = value.first;
+			std::vector<string> s = get_Anagrams(temp);
+			if(s.size()>1)
+				v.push_back(s);
+		}
+	
+	return v;
+}

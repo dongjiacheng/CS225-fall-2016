@@ -1,0 +1,211 @@
+/**
+ * @file graph_tools.cpp
+ * This is where you will implement several functions that operate on graphs.
+ * Be sure to thoroughly read the comments above each function, as they give
+ *  hints and instructions on how to solve the problems.
+ */
+
+#include "graph_tools.h"
+
+/**
+ * Finds the minimum edge weight in the Graph graph.
+ * THIS FUNCTION IS GRADED.
+ *
+ * @param graph - the graph to search
+ * @return the minimum weighted edge
+ *
+ * @todo Label the minimum edge as "MIN". It will appear blue when
+ *  graph.savePNG() is called in minweight_test.
+ *
+ * @note You must do a traversal.
+ * @note You may use the STL stack and queue.
+ * @note You may assume the graph is connected.
+ *
+ * @hint Initially label vertices and edges as unvisited.
+ */
+int GraphTools::findMinWeight(Graph& graph)
+{
+    /* Your code here! */
+   Edge Min;
+   
+   vector<Vertex> allV = graph.getVertices();
+
+   vector<Edge> edges = graph.getEdges();
+   if(edges.size() == 0)
+   	return 0;
+   else
+   	 {
+   	 	Min = edges[0];
+   }
+   for(auto & v :  allV)
+   {
+   	graph.setVertexLabel(v,"UNVISITED");
+    vector<Vertex> adj = graph.getAdjacent(v);
+    for(auto & a : adj)
+    graph.setEdgeLabel(v, a, "UNEXPLORED");
+   }
+  // graph.snapshot();
+   
+   for(auto & v :  allV)
+   {
+   	if(graph.getVertexLabel(v) == "UNVISITED")
+   		BFSwithMinW(graph,v,Min);
+ //  	graph.snapshot();
+   }
+
+    Vertex c = Min.source;
+    Vertex b = Min.dest;
+    graph.setEdgeLabel(c,b,"MIN");
+  //  graph.snapshot();
+    return graph.getEdgeWeight(c,b);
+}
+
+
+void GraphTools::BFSwithMinW(Graph& graph, Vertex& v, Edge& Min){
+	queue<Vertex> q;
+	graph.setVertexLabel(v,"VISITED");
+	q.push(v);
+	vector<Vertex> adj = graph.getAdjacent(v);
+    while(!q.empty())
+    {
+    	Vertex curr = q.front();
+    	q.pop();
+    	vector<Vertex> adj = graph.getAdjacent(curr);
+    	for(auto & a : adj)
+    	{
+    		int R = graph.getEdgeWeight(a,curr);
+    		Vertex c = Min.source;
+   			Vertex b = Min.dest;
+    		int M = graph.getEdgeWeight(c,b);
+    		if(M > R)
+ 	  		Min = graph.getEdge(a,curr);
+    		if(graph.getVertexLabel(a) == "UNVISITED")
+    		{
+    		graph.setEdgeLabel(curr,a,"DISCOVERY");
+    		graph.setVertexLabel(a,"VISITED");
+    		q.push(a);
+    		}
+    		else if(graph.getEdgeLabel(a,curr) == "UNEXPLORED")
+    			graph.setEdgeLabel(curr,a,"CROSS");
+
+    	}
+    }
+}
+
+/**
+ * Returns the shortest distance (in edges) between the Vertices
+ *  start and end.
+ * THIS FUNCTION IS GRADED.
+ *
+ * @param graph - the graph to search
+ * @param start - the vertex to start the search from
+ * @param end - the vertex to find a path to
+ * @return the minimum number of edges between start and end
+ *
+ * @todo Label each edge "MINPATH" if it is part of the minimum path
+ *
+ * @note Remember this is the shortest path in terms of edges,
+ *  not edge weights.
+ * @note Again, you may use the STL stack and queue.
+ * @note You may also use the STL's unordered_map, but it is possible
+ *  to solve this problem without it.
+ *
+ * @hint In order to draw (and correctly count) the edges between two
+ *  vertices, you'll have to remember each vertex's parent somehow.
+ */
+int GraphTools::findShortestPath(Graph& graph, Vertex start, Vertex end)
+{
+    /* Your code here! */
+   vector<Vertex> allV = graph.getVertices();
+   for(auto & v :  allV)
+   {
+   	graph.setVertexLabel(v,"UNVISITED");
+    vector<Vertex> adj = graph.getAdjacent(v);
+    for(auto & a : adj)
+    graph.setEdgeLabel(v, a, "UNEXPLORED");
+   }
+   //graph.snapshot();
+   
+  	unordered_map<Vertex,Vertex> parent;
+   	BFSwithP(graph,start,parent);
+   	int distance = 0;
+   	while(end != start)
+   	{
+   		distance++;
+   		graph.setEdgeLabel(end,parent[end],"MINPATH");
+   		end = parent[end];
+   	}
+    return distance;
+}
+
+void GraphTools::BFSwithP(Graph& graph, Vertex& v,unordered_map<Vertex,Vertex>& parent){
+	queue<Vertex> q;
+	graph.setVertexLabel(v,"VISITED");
+	q.push(v);
+	vector<Vertex> adj = graph.getAdjacent(v);
+	
+    while(!q.empty())
+    {
+    	Vertex curr = q.front();
+    	q.pop();
+    	vector<Vertex> adj = graph.getAdjacent(curr);
+    	for(auto & a : adj)
+    	{
+    		if(graph.getVertexLabel(a) == "UNVISITED")
+    		{
+    		graph.setEdgeLabel(curr,a,"DISCOVERY");
+    		graph.setVertexLabel(a,"VISITED");
+    		parent[a] = curr;
+    		q.push(a);
+    		}
+    		else if(graph.getEdgeLabel(a,curr) == "UNEXPLORED")
+    			graph.setEdgeLabel(curr,a,"CROSS");
+
+    	}
+    }
+}
+
+/**
+ * Finds a minimal spanning tree on a graph.
+ * THIS FUNCTION IS GRADED.
+ *
+ * @param graph - the graph to find the MST of
+ *
+ * @todo Label the edges of a minimal spanning tree as "MST"
+ *  in the graph. They will appear blue when graph.savePNG() is called.
+ *
+ * @note Use your disjoint sets class from MP 7.1 to help you with
+ *  Kruskal's algorithm. Copy the files into the libdsets folder.
+ * @note You may call std::sort instead of creating a priority queue.
+ */
+void GraphTools::findMST(Graph& graph)
+{
+    /* Your code here! */
+    vector<Edge> allE = graph.getEdges();
+    sort(allE.begin(),allE.end());
+    unordered_map<Vertex,int> verts;
+    vector<Vertex> allV = graph.getVertices();
+    for(size_t t = 0; t < allV.size(); ++t )
+    {
+    	verts[allV[t]] = t;
+    }
+    DisjointSets Track;
+    Track.addelements(allV.size());
+    for(size_t i = 0; i < allE.size(); ++i )
+    {
+    	if((-Track.find(0)) == int(allV.size()))
+    		return;
+    	Edge currE = allE[i];
+    	Vertex a = currE.source;
+    	Vertex b = currE.dest;
+    	int Va = verts[a];
+    	int Vb = verts[b];
+    	if(Track.find(Va) != Track.find(Vb))
+    	{
+    		Track.setunion(Va, Vb);
+    		graph.setEdgeLabel(a,b,"MST");
+    	}
+    }
+}
+
+

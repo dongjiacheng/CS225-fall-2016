@@ -1,0 +1,91 @@
+/**
+ * @file quadtree.h
+ * Quadtree class definition.
+ * @date Spring 2008
+ */
+
+#ifndef QUADTREE_H
+#define QUADTREE_H
+
+#include "png.h"
+
+/**
+ * A tree structure that is used to compress PNG images.
+ */
+class Quadtree
+{
+  public:
+   void buildTree(PNG const & source, int d);
+   
+   ~Quadtree();
+
+   Quadtree();
+   
+   void clear();
+   
+   Quadtree(Quadtree const &other);
+   
+   Quadtree const & operator= (Quadtree const &other);
+   
+   Quadtree(PNG const & source, int d);
+
+   RGBAPixel getPixel(int x, int y) const;
+
+
+   PNG decompress  () const;
+
+   void clockwiseRotate (   ) ;
+   void prune ( int   tolerance ) ;
+   int pruneSize  ( int   tolerance ) const;
+   int idealPrune  ( int   numLeaves ) const;
+
+
+  
+  private:
+
+    class QuadtreeNode
+    {
+      public:
+        QuadtreeNode* nwChild; /**< pointer to northwest child */
+        QuadtreeNode* neChild; /**< pointer to northeast child */
+        QuadtreeNode* swChild; /**< pointer to southwest child */
+        QuadtreeNode* seChild; /**< pointer to southeast child */
+
+        RGBAPixel element; /**< the pixel stored as this node's "data" */
+    };
+
+   RGBAPixel* getPixel(QuadtreeNode* subroot,int X, int Y, int X0, int Y0, int X1, int Y1, int d) const;
+   
+   void copy(Quadtree const &other);
+   
+   void copy(QuadtreeNode* &subroot, QuadtreeNode* const &otherRoot);
+   
+   void clear(QuadtreeNode* &subroot);
+   
+   QuadtreeNode* buildTree(PNG const & source, int d, int X0, int Y0, int X1, int Y1);//helper function
+   
+   int length;
+   
+   int x0;
+   
+   int y0;
+   
+   int x1;
+   
+   int y1;
+    /**
+     * A simple class representing a single node of a Quadtree.
+     * You may want to add to this class; in particular, it could
+     * probably use a constructor or two...
+     */
+    
+
+    QuadtreeNode* root; /**< pointer to root of quadtree */
+
+
+/**** Functions for testing/grading                      ****/
+/**** Do not remove this line or copy its contents here! ****/
+#include "quadtree_given.h"
+};
+
+#endif

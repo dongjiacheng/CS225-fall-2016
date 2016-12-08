@@ -1,0 +1,197 @@
+Grading r11754 by enx-cs225autograder committed on Tue Sep 13 00:57:25 CDT 2016
+Monad Autograder
+Testing mp2 at 2016-09-14 00:40:27
+
+"I like it because it feels like I'm drinking something special." ~ Sean Massung
+
+Setting up test environment...
+Compiling...
+================================================================
+
+
+Running tests...
+================================================================
+InvertColorsEven . . . . . . . . . [8 pts] - passed
+FlipLeftEven . . . . . . . . . . . [4 pts] - passed
+FlipLeftOdd  . . . . . . . . . . . [4 pts] - passed
+AdjustBrightnessEven . . . . . . . [3 pts] - passed
+AdjustBrightnessEven2  . . . . . . [3 pts] - passed
+AdjustBrightnessEven3  . . . . . . [3 pts] - passed
+ImageMakefile  . . . . . . . . . . [5 pts] - passed
+Valgrind1 (asan) . . . . . . . . . [5 pts] - passed
+AddPictureValidIndex . . . . . . . [2 pts] - passed
+AddPictureInvalidIndex . . . . . . [2 pts] - passed
+ImageAssignmentOperator  . . . . . [2 pts] - passed
+SceneGetPictureInvalidIndex  . . . [2 pts] - passed
+SceneChangeMaxLayersLarger . . . . [2 pts] - passed
+SceneChangeMaxLayersSmaller (asan) [1 pts] - passed
+SceneChangeMaxLayersInvalidChange  [2 pts] - passed
+SceneCopyCtor  . . . . . . . . . . [2 pts] - FAILED: Segmentation fault
+SceneCopyCtor2 . . . . . . . . . . [2 pts] - FAILED: Segmentation fault
+SceneAssignmentOperator  . . . . . [2 pts] - FAILED: Segmentation fault
+SceneAssignmentOperator2 . . . . . [2 pts] - FAILED: Segmentation fault
+SceneChangeLayer . . . . . . . . . [2 pts] - passed
+SceneChangeLayerInvalid  . . . . . [2 pts] - passed
+SceneDrawScene . . . . . . . . . . [3 pts] - passed
+SceneDrawScene2  . . . . . . . . . [3 pts] - passed
+SceneDrawScene3  . . . . . . . . . [3 pts] - passed
+SceneDrawScene4  . . . . . . . . . [3 pts] - passed
+SceneDrawSceneChangeLayer  . . . . [2 pts] - passed
+SceneDrawSceneDeletePicture  . . . [2 pts] - passed
+SceneDrawSceneTranslate  . . . . . [2 pts] - passed
+SceneDrawSceneTranslate2 . . . . . [2 pts] - passed
+SceneTranslateInvalid  . . . . . . [2 pts] - passed
+SceneTranslateInvalid2 . . . . . . [1 pts] - passed
+SceneDeletePictureInvalid  . . . . [2 pts] - passed
+Valgrind2 (asan) . . . . . . . . . [5 pts] - FAILED: Memory errors detected by ASAN
+Valgrind3 (asan) . . . . . . . . . [5 pts] - FAILED: Memory errors detected by ASAN
+SceneMakefile  . . . . . . . . . . [5 pts] - passed
+
+
+Total score...
+================================================================
+TOTAL SCORE: 82
+
+
+
+Detailed test output...
+================================================================
+----------------------------------------------------------------
+SceneCopyCtor [2 points]
+Result: FAILED: Segmentation fault
+Took 0ms (2000ms timeout)
+Output:
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+SceneCopyCtor2 [2 points]
+Result: FAILED: Segmentation fault
+Took 0ms (2000ms timeout)
+Output:
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+SceneAssignmentOperator [2 points]
+Result: FAILED: Segmentation fault
+Took 0ms (2000ms timeout)
+Output:
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+SceneAssignmentOperator2 [2 points]
+Result: FAILED: Segmentation fault
+Took 0ms (2000ms timeout)
+Output:
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+Valgrind2 (run under asan) [5 points]
+Result: FAILED: Memory errors detected by ASAN
+Took unknown time (10000ms timeout)
+Output:
+----------------------------------------------------------------
+Running Valgrind2 [worth 5 points, output below]
+ASAN:SIGSEGV
+=================================================================
+==4446==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000420b65 bp 0x000000000003 sp 0x7ffcc13225f0 T0)
+    #0 0x420b64 in __asan::Deallocate(void*, __sanitizer::StackTrace*, __asan::AllocType) /dev/shm/225/lm35/src/llvm/projects/compiler-rt/lib/asan/asan_allocator2.cc:473:3
+    #1 0x41f50c in operator delete[](void*) /dev/shm/225/lm35/src/llvm/projects/compiler-rt/lib/asan/asan_new_delete.cc:98:3
+    #2 0x67fe3e in Scene::clear() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x67fe3e)
+    #3 0x680437 in Scene::copy(Scene const&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x680437)
+    #4 0x680207 in Scene::Scene(Scene const&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x680207)
+    #5 0x65c213 in proxy_test::Valgrind2(util::sizedpipestream<512ul>&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x65c213)
+    #6 0x4ea848 in monad_shared::unit_test_input::execute(util::sizedpipestream<512ul>&) const (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4ea848)
+    #7 0x4cf9f3 in proxy::test_execution::child_test() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4cf9f3)
+    #8 0x4c153e in proxy::test_execution::child() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4c153e)
+    #9 0x4bbd22 in proxy::RunTests::run_single_test(monad_shared::unit_test_input const&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4bbd22)
+    #10 0x4b19e7 in proxy::RunTests::run_single_test(char const*) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4b19e7)
+    #11 0x4b0b87 in proxy::RunTests::execute_by_mode() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4b0b87)
+    #12 0x4ad2e9 in proxy::RunTests::execute() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4ad2e9)
+    #13 0x4aac3e in main (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4aac3e)
+    #14 0x7f75c39c0b14 in __libc_start_main (/lib64/libc.so.6+0x21b14)
+    #15 0x4a37bc in _start (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4a37bc)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /dev/shm/225/lm35/src/llvm/projects/compiler-rt/lib/asan/asan_allocator2.cc:473 __asan::Deallocate(void*, __sanitizer::StackTrace*, __asan::AllocType)
+==4446==ABORTING
+Result: FAILED:
+Memory Errors Detected by ASAN
+
+----------------------------------------------------------------
+Valgrind3 (run under asan) [5 points]
+Result: FAILED: Memory errors detected by ASAN
+Took unknown time (10000ms timeout)
+Output:
+----------------------------------------------------------------
+Running Valgrind3 [worth 5 points, output below]
+=================================================================
+==4454==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x60200000eee0 at pc 0x000000681f86 bp 0x7fff196cb3b0 sp 0x7fff196cb3a8
+READ of size 8 at 0x60200000eee0 thread T0
+    #0 0x681f85 in Scene::changemaxlayers(int) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x681f85)
+    #1 0x65d6d8 in proxy_test::Valgrind3(util::sizedpipestream<512ul>&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x65d6d8)
+    #2 0x4ea848 in monad_shared::unit_test_input::execute(util::sizedpipestream<512ul>&) const (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4ea848)
+    #3 0x4cf9f3 in proxy::test_execution::child_test() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4cf9f3)
+    #4 0x4c153e in proxy::test_execution::child() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4c153e)
+    #5 0x4bbd22 in proxy::RunTests::run_single_test(monad_shared::unit_test_input const&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4bbd22)
+    #6 0x4b19e7 in proxy::RunTests::run_single_test(char const*) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4b19e7)
+    #7 0x4b0b87 in proxy::RunTests::execute_by_mode() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4b0b87)
+    #8 0x4ad2e9 in proxy::RunTests::execute() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4ad2e9)
+    #9 0x4aac3e in main (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4aac3e)
+    #10 0x7ff01e4f9b14 in __libc_start_main (/lib64/libc.so.6+0x21b14)
+    #11 0x4a37bc in _start (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4a37bc)
+
+0x60200000eee0 is located 0 bytes to the right of 16-byte region [0x60200000eed0,0x60200000eee0)
+allocated by thread T0 here:
+    #0 0x41ef1b in operator new[](unsigned long) /dev/shm/225/lm35/src/llvm/projects/compiler-rt/lib/asan/asan_new_delete.cc:64:37
+    #1 0x67f23c in Scene::Scene(int) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x67f23c)
+    #2 0x65d519 in proxy_test::Valgrind3(util::sizedpipestream<512ul>&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x65d519)
+    #3 0x4ea848 in monad_shared::unit_test_input::execute(util::sizedpipestream<512ul>&) const (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4ea848)
+    #4 0x4cf9f3 in proxy::test_execution::child_test() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4cf9f3)
+    #5 0x4c153e in proxy::test_execution::child() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4c153e)
+    #6 0x4bbd22 in proxy::RunTests::run_single_test(monad_shared::unit_test_input const&) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4bbd22)
+    #7 0x4b19e7 in proxy::RunTests::run_single_test(char const*) (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4b19e7)
+    #8 0x4b0b87 in proxy::RunTests::execute_by_mode() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4b0b87)
+    #9 0x4ad2e9 in proxy::RunTests::execute() (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4ad2e9)
+    #10 0x4aac3e in main (/dev/shm/cs225student/autograder/monad/monad/mp2_grade/proxy-asan+0x4aac3e)
+    #11 0x7ff01e4f9b14 in __libc_start_main (/lib64/libc.so.6+0x21b14)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow ??:0 Scene::changemaxlayers(int)
+Shadow bytes around the buggy address:
+  0x0c047fff9d80: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff9d90: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff9da0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff9db0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff9dc0: fa fa fa fa fa fa fa fa fa fa fd fa fa fa fd fa
+=>0x0c047fff9dd0: fa fa 00 fa fa fa 00 fa fa fa 00 00[fa]fa 04 fa
+  0x0c047fff9de0: fa fa fd fa fa fa fd fa fa fa fd fa fa fa fd fa
+  0x0c047fff9df0: fa fa fd fa fa fa 04 fa fa fa 04 fa fa fa fd fa
+  0x0c047fff9e00: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff9e10: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff9e20: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Heap right redzone:      fb
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack partial redzone:   f4
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  ASan internal:           fe
+==4454==ABORTING
+Result: FAILED:
+Memory Errors Detected by ASAN
+
+
+----------------------------------------------------------------
+Total score...
+================================================================
+TOTAL SCORE: 82
+

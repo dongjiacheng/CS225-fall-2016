@@ -1,0 +1,22 @@
+CD to .. 
+/home/mattox/repos/cs225/fa16-exam3-grading/submissions/jdong19
+###############################
+##                           ##
+##     Grading question      ##
+##                           ##
+###############################
+Grader dir is /home/mattox/repos/cs225/fa16-exam3-grading/code-grading/scripts
+qid is easy-01
+variant is
+test_dir is /home/mattox/repos/cs225/fa16-exam3-grading/code-grading/scripts/tests/easy-01/
+No tests for question easy-01
+
+Grade for question : -5/100
+
+
+~ ~ ~
+
+Grade: -5
+
+Details:
+test,grade

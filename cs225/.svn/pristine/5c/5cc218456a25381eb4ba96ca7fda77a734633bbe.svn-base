@@ -1,0 +1,59 @@
+CD to .. 
+/home/mattox/repos/cs225/fa16-exam2-grading/submissions/jdong19
+###############################
+##                           ##
+##     Grading question      ##
+##                           ##
+###############################
+Grader dir is /home/mattox/repos/cs225/fa16-exam2-grading/code-grading/scripts
+qid is hard-03
+variant is
+test_dir is /home/mattox/repos/cs225/fa16-exam2-grading/code-grading/scripts/tests/hard-03/
+fullTmpDir = /home/mattox/repos/cs225/fa16-exam2-grading/submissions/jdong19/grade-.PAh
+:: Compiling...
+g++ -std=c++0x -c -g -O0 -Wall -Wextra -Wno-unused-function   -c -o hard.o hard.cpp
+hard.cpp: In function ‘void llUnion(LinkedList*, LinkedList*, LinkedList*)’:
+hard.cpp:7:17: error: request for member ‘head’ in ‘lst1’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+  Node *A = lst1.head;
+                 ^~~~
+hard.cpp:8:24: error: request for member ‘head’ in ‘lst2’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+         Node *B = lst2.head;
+                        ^~~~
+hard.cpp:10:14: error: request for member ‘head’ in ‘unn’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+         {unn.head = B;return;}
+              ^~~~
+hard.cpp:12:14: error: request for member ‘head’ in ‘unn’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+         {unn.head = A;return;}
+              ^~~~
+hard.cpp:14:15: error: request for member ‘head’ in ‘unn’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+           unn.head = A;
+               ^~~~
+hard.cpp:16:15: error: request for member ‘head’ in ‘unn’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+           unn.head = B;
+               ^~~~
+hard.cpp:17:15: error: request for member ‘head’ in ‘unn’, which is of pointer type ‘LinkedList*’ (maybe you meant to use ‘->’ ?)
+  Node*G = unn.head;
+               ^~~~
+hard.cpp:24:25: error: expected ‘)’ before ‘;’ token
+      else (  G->next = B;
+                         ^
+hard.cpp:26:25: error: expected primary-expression before ‘)’ token
+   G = G->next;          )
+                         ^
+hard.cpp:31:31: warning: suggest parentheses around assignment used as truth value [-Wparentheses]
+         else if(B->next = NULL)
+                               ^
+<builtin>: recipe for target 'hard.o' failed
+make: *** [hard.o] Error 1
+Could not compile hard.o.
+
+Grade for question : 0/100
+
+
+~ ~ ~
+
+Grade: 0
+
+Details:
+test,grade
+_compiled,0

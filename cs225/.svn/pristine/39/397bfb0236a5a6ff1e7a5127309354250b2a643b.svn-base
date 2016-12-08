@@ -1,0 +1,29 @@
+Grading r46619 by jdong19 committed on Sun Nov  6 17:35:27 CST 2016
+Monad Autograder
+Testing lab_btree at 2016-11-07 00:32:21
+
+"I've seen many balls. Actually, let's do an example without balls." ~ Jack Toole
+
+Setting up test environment...
+Compiling...
+================================================================
+
+
+Running tests...
+================================================================
+test_insertion_idx_emp  . . . [10 pts] - passed
+test_insertion_idx_small  . . [10 pts] - passed
+test_insertion_idx_logn . . . [10 pts] - passed
+test_btree3_small (asan)  . . [10 pts] - passed
+test_btree3_large_seq . . . . [10 pts] - passed
+test_btree3_large_rand  . . . [10 pts] - passed
+test_btree64_large_seq  . . . [10 pts] - passed
+test_btree64_large_rand . . . [10 pts] - passed
+test_btree128_med_rand (asan) [10 pts] - passed
+test_btree5_strings . . . . . [10 pts] - passed
+
+
+Total score...
+================================================================
+TOTAL SCORE: 100
+
