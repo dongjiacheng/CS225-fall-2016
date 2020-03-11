@@ -31,14 +31,15 @@ List<T>::~List()
 template <class T>
 void List<T>::clear()
 {
-
-for(int i = 0 ; i < length; i++)
+for(i = 0; i< length; i++)
 {
 ListNode* temp = head->next;
 delete head;
 head = temp;
 
+
 }
+length = 0;
 tail = NULL;
 length = 0;
 }    /// @todo Graded in MP3.1

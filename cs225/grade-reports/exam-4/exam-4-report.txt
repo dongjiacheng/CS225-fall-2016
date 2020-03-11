@@ -1,0 +1,15 @@
+Exam 4 report for  Jiacheng  Dong
+          Problem | Score
+  ----------------+------
+     mc-cpp4-003a |   4
+     mc-cpp4-003j |   4
+     mc-cpp4-004f |   0
+     mc-cpp4-005a |   4
+     mc-cpp4-006c |   4
+     mc-cpp4-007g |   4
+  ----------------+------
+         first-02 | 13.00 / 13
+        second-01 | 6.89 / 13
+  ----------------+------
+Total: 39.89 (=79.78 percent) 
+
